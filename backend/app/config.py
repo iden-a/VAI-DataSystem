@@ -1,0 +1,1 @@
+# Configuration settings (e.g., Firebase credentials, environment variables)
