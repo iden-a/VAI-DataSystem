@@ -46,7 +46,7 @@ Ensure you have the following installed:
    - Start the backend:
      ```sh
      cd backend
-     flask run
+     python3 run.py or python run.py
      ```
    - Start the frontend:
      ```sh
