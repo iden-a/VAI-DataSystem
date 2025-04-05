@@ -1,0 +1,117 @@
+/* global CSS file */
+* {
+    font-family: 'Hanken Grotesk', sans-serif;
+}
+
+body {
+    padding: 2%;
+  }
+
+/* Logo */
+.login-sign-up {
+    display: flex;
+    gap: 1.5rem; 
+}
+
+.logo {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    max-width: 75%;
+    cursor: pointer;
+}
+
+.logo-img-1{
+    max-width: 5%;
+}
+.logo-img-2 {
+    margin-top: 0.5%;
+    max-width: 6.5%;
+}
+.logo-img-3 {
+    margin-top: 3%;
+    max-width: 12.5%;
+}
+
+/* Navbar */
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.login:hover, .sign-up:hover {
+    color: #FF6C03;
+    cursor: pointer;
+  }
+
+/* Home Page */
+.home-container {
+    text-align: center;
+    height: 70vh;
+    margin-top: 10%;
+}
+
+.home-text {
+    text-align: center;
+    font-size: 1em;
+}
+
+.home-footer {
+    margin-top: 15%;
+    font-weight: bold;
+}
+
+.home-footer a {
+    text-decoration: none;
+    color: black;
+}
+
+.home-footer a:hover {
+    text-decoration: none;
+    color: #FF6C03;
+}
+
+/* Installation Page */
+.installation-container{
+    margin-top: 5%;
+    text-align: center;
+    display: flex;
+    justify-content: space-evenly;
+    padding-bottom: 5%;
+
+}
+.installation-img {
+    width: 50%;
+}
+.installation-h2 {
+    text-align: center;
+    margin-top: 5%;
+}
+
+/* Button CSS */
+.blue-button, .thank-you-button {
+    background-color: #36C0FC;  
+    color: black;              
+    padding: 10px 20px; 
+    border: none;              
+    border-radius: 10px;        
+    font-size: 16px;           
+    cursor: pointer;            
+    transition: background-color 0.3s;  
+    margin-top: 3%;
+  }
+  
+.blue-button:hover, .thank-you-button:hover {
+    background-color: #27AE60;  
+  }
+  
+.blue-button:active, .thank-you-button:hover {
+    background-color: #27AE60;  
+    transform: translateY(1px); 
+  }
+
+/* Thank you page */
+.thank-you-container {
+    text-align: center;
+    margin-top: 5%;
+}

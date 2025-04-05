@@ -1,0 +1,150 @@
+.survey-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 4%;
+    min-height: 70vh;
+    justify-content: center;
+}
+
+.question-container {
+    animation: fadeIn 0.6s ease-in-out;
+    width: 100%;
+    max-width: 600px;
+    text-align: left;
+}
+
+.option-label {
+    display: block;
+    margin: 12px 0;
+    font-size: 18px;
+}
+
+.survey-img {
+    width: 25%;
+}
+
+.progress-container {
+    width: 100%;
+    max-width: 600px;
+    margin-bottom: 2rem;
+}
+
+.progress-text {
+    font-size: 16px;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 10px;
+    background-color: #e0e0e0;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background-color: #36C0FC;
+    transition: width 0.3s ease-in-out;
+}
+
+.nav-button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.next-button {
+    background-color: #FF6C03;  
+    color: black;              
+    padding: 10px 20px; /* Top/bottom and left/right padding */
+    border: none;              
+    border-radius: 10px;        
+    font-size: 16px;           
+    cursor: pointer;            
+    transition: background-color 0.3s;  
+    margin-top: 3%;
+    margin-left: 2%;
+}
+
+.back-button {
+    background-color: #36C0FC;  
+    color: black;              
+    padding: 10px 20px; /* Top/bottom and left/right padding */
+    border: none;              
+    border-radius: 10px;        
+    font-size: 16px;           
+    cursor: pointer;            
+    transition: background-color 0.3s;  
+    margin-top: 3%;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Range slider css */
+/* Range input wrapper */
+.range-input-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+/* Range input */
+.range-input-wrapper input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 10px;
+    border-radius: 5px;
+    background: #ddd;
+    outline: none;
+}
+
+/* Range input thumb (slider) */
+.range-input-wrapper input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #ff77c9;
+    cursor: pointer;
+}
+
+.range-input-wrapper input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #ff77c9;
+    cursor: pointer;
+}
+
+/* Change the slider's thumb color when hovered */
+.range-input-wrapper input[type="range"]:hover::-webkit-slider-thumb {
+    background: #ff77c9;
+}
+
+.range-input-wrapper input[type="range"]:hover::-moz-range-thumb {
+    background: #ff77c9;
+}
+
+/* Labels under the range */
+.range-labels {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 10px;
+    font-size: 14px;
+    color: #555;
+}
+
+.range-labels span {
+    width: 20%;
+    text-align: center;
+}

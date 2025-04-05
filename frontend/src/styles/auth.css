@@ -1,0 +1,47 @@
+.auth-container {
+    max-width: 400px;
+    margin: 5% auto;
+    background: #f7f7f7;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.auth-form input {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+.auth-button {
+    background-color: #36C0FC;
+    color: black;
+    border: none;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.auth-button:hover {
+    background-color: #27AE60;
+}
+
+.auth-container a {
+    color: #FF6C03;
+    text-decoration: none;
+}
+
+.login-signup-footer {
+    text-align: center;
+    font-style: italic;
+}
