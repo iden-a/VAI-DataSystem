@@ -51,6 +51,6 @@ Ensure you have the following installed:
    - Start the frontend:
      ```sh
      cd frontend
-     npm start
+     npm run dev
      ```
 
