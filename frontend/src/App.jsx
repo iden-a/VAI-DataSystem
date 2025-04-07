@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import Home from './pages/Home';
 import Installation from './pages/Installation';
@@ -10,6 +10,9 @@ import Dashboard from './pages/Dashboard';
 import './styles/global.css'
 
 function App() {
+  const [user, setUser] = useState({});
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [surveyData, setSurveyData] = useState({});
 
   return (
     <>
@@ -19,9 +22,13 @@ function App() {
         <Route path='/installation-selection' element={<Installation/>}></Route>
         <Route path='/survey' element={<Survey/>}></Route>
         <Route path='/survey-complete' element={<ThankYou/>}></Route>
-        <Route path='/login' element={<Login/>}></Route>
+        <Route path="/login" element={
+          <Login setUser={setUser} setIsAuthenticated={setIsAuthenticated} />
+        } />
         <Route path='/sign-up' element={<Signup/>}></Route>
-        <Route path='/dashboard' element={<Dashboard/>}></Route> 
+        <Route path="/dashboard" element={
+          <Dashboard user={user} isAuthenticated={isAuthenticated} />
+        } />
       </Routes>
     </Router>
     </>
