@@ -5,9 +5,10 @@ from flask_cors import CORS
 
 def create_app():
     app = Flask(__name__)
-    CORS(app)
-    
     app.config.from_object(Config)
+    CORS(app, origins=app.config['FRONTEND_URL'])
+    
+    
 
     # Firebase setup
     cred = credentials.Certificate(app.config['FIREBASE_KEY_PATH'])

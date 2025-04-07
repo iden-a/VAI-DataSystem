@@ -1,0 +1,21 @@
+.dashboard-container {
+    background-color:  #D9D9D9;
+    height: 50vh;
+    margin-top: 5%;
+    padding: 2%;
+}
+
+.filter-button {
+    float: right;
+    background-color: #FF77C9;  
+    color: black;              
+    padding: 10px 20px; 
+    border: none;              
+    border-radius: 10px;        
+    font-size: 16px;           
+    cursor: pointer;            
+    transition: background-color 0.3s;  
+
+
+}
+

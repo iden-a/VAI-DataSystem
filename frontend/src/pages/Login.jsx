@@ -2,19 +2,38 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Logo from '../components/Logo';
 import '../styles/auth.css';
+import API from '../utils/apiClient';
 
-export default function Login() {
+export default function Login( { setUser, setIsAuthenticated}) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
+
+    const [error, setError] = useState('');
     const navigate = useNavigate();
 
-    const handleLogin = (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
-        console.log("Login Info:", { email, password });
 
-        // Placeholder for auth logic (Firebase)
-        navigate('/dashboard'); // Redirect after login
+        try {
+            const res = await API.post('/login', {email, password})
+
+            const { jwt_token, user } = res.data;
+            localStorage.setItem('jwtToken', jwt_token);
+
+            setUser(user);
+            setIsAuthenticated(true);
+            navigate('/dashboard'); 
+            
+        } catch (err) {
+            setError(err.response?.data?.message || 'Login failed. Please enter a valid email/password.');
+            console.error('Login error:', err);
+        }
+        
+        setEmail('')
+        setPassword('')
     };
+
 
     return (
         <>
@@ -29,20 +48,32 @@ export default function Login() {
                     onChange={(e) => setEmail(e.target.value)}
                     required
                 />
-                <input
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                />
+                <div className="password-wrapper">
+                    <input
+                        type={showPassword ? 'text' : 'password'}
+                        name="password"
+                        placeholder="Password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                    />
+                    <button
+                        type="button"
+                        className="show-password-btn"
+                        onClick={() => setShowPassword(prev => !prev)}
+                    >
+                        {showPassword ? 'Hide' : 'Show'}
+                    </button>
+                </div>
+                
                 <button type="submit" className="auth-button">Log In</button>
+                {error && <div className="error-message">{error}</div>}
             </form>
             <p>
                 Don't have an account? <a href="/sign-up">Sign up</a>
             </p>
         </div>
-        <footer className="login-signup-footer">Only Van Alen Instititute’s Staff Can Create An Account</footer>
+        <footer className="login-signup-footer">Only Van Alen Instititute’s Staff Can Log Into An Account</footer>
 
         </>
 
