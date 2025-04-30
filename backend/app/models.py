@@ -18,7 +18,7 @@ class UserSignUp:
 
 # survey response class
 class SurveyResponse:
-    def __init__(self, responses: dict, installation_id:str):
+    def __init__(self, responses, installation_id):
         self.responses = responses # {}
         self.installation_id = installation_id # installation #1
         self.submitted_at = datetime.now(timezone.utc).isoformat() # time of submission
@@ -30,7 +30,7 @@ class SurveyResponse:
             "submittedAt" : self.submitted_at
         }
     
-class DisplaySurveyData:
-    def __init__(self, responses):
-        self.responses = responses
+class DownloadSurveyData: # formatting the survey responses for download
+    def __init__(self, allResponses):
+        self.allResponses = allResponses
         pass

@@ -13,6 +13,23 @@ def health_check():
 @main.route('/submit-survey', methods=['POST'])
 def submit_survey():
     response_data = request.json
+    raw_responses = response_data.get('responses')
+    responses = {}
+
+    for key, value in raw_responses.items():
+        # If it's a list with more than one item, keep it as is (for checkboxes)
+        if isinstance(value, list):
+            if len(value) > 1:
+                responses[key] = value
+            elif len(value) == 1:
+                responses[key] = value[0]  # Convert single-item list to a string
+            else:
+                responses[key] = ""  # Empty list becomes empty string
+        else:
+            responses[key] = value  # In case it's already a string
+            
+    print("Received survey submission response_data:", response_data)
+
     installation_id = response_data.get('installationId')
     responses = response_data.get('responses')
 
@@ -20,7 +37,7 @@ def submit_survey():
     
     try:
         current_app.db.collection('surveyResponses').add(survey_response.to_dict())
-        return jsonify({"message": "Survey submitted"}), 200
+        return jsonify({"message": "Survey submitted", "survey responses": responses}), 200
 
     except Exception as e:
         return jsonify({"error": str(e)}), 400
@@ -99,3 +116,20 @@ def login_user():
     except Exception as e:
         return jsonify({"error": str(e)}), 400
 
+@main.route('/get-survey-responses', methods=['GET'])
+def get_survey_responses():
+    try:
+        # Access Firestore from current_app
+        db = current_app.db
+        responses_ref = db.collection('surveyResponses')
+        docs = responses_ref.stream()
+
+        responses = []
+        for doc in docs:
+            response = doc.to_dict()
+            response['id'] = doc.id  # Include document ID if needed
+            responses.append(response)
+
+        return jsonify(responses), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500

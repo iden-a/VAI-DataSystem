@@ -4,7 +4,7 @@ import Logo from '../components/Logo';
 import '../styles/auth.css';
 import API from '../utils/apiClient';
 
-export default function Login( { setUser, setIsAuthenticated}) {
+export default function Login( { setUser, setIsAuthenticated, setSurveyData}) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
@@ -23,6 +23,12 @@ export default function Login( { setUser, setIsAuthenticated}) {
 
             setUser(user);
             setIsAuthenticated(true);
+
+            // fetch survey data after logging in 
+            const surveyRes = await API.get('/get-survey-responses')
+            setSurveyData(surveyRes.data)
+            console.log("Survey Data: ", surveyRes.data)
+
             navigate('/dashboard'); 
             
         } catch (err) {

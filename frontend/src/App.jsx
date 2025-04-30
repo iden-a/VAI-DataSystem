@@ -12,7 +12,7 @@ import './styles/global.css'
 function App() {
   const [user, setUser] = useState({});
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [surveyData, setSurveyData] = useState({});
+  const [surveyData, setSurveyData] = useState([]);  // when the user logs in we want to retrieve all of the survey data from the backend
 
   return (
     <>
@@ -23,11 +23,11 @@ function App() {
         <Route path='/survey' element={<Survey/>}></Route>
         <Route path='/survey-complete' element={<ThankYou/>}></Route>
         <Route path="/login" element={
-          <Login setUser={setUser} setIsAuthenticated={setIsAuthenticated} />
+          <Login setUser={setUser} setIsAuthenticated={setIsAuthenticated} setSurveyData={setSurveyData} />
         } />
         <Route path='/sign-up' element={<Signup/>}></Route>
         <Route path="/dashboard" element={
-          <Dashboard user={user} isAuthenticated={isAuthenticated} />
+          <Dashboard user={user} isAuthenticated={isAuthenticated} surveyData={surveyData}/>
         } />
       </Routes>
     </Router>

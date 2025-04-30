@@ -3,11 +3,13 @@ export default function SurveyQuestion({
     options, 
     multiple, 
     currentAnswer, 
-    questionType = "choice", // default
+    questionType = "choice",
     onAnswer, 
     onNext, 
     onBack, 
-    isFirst
+    isFirst,
+    isLast,
+    handleSubmit
 }) {
     const handleChange = (e, option) => {
         if (questionType === "range") {
@@ -66,6 +68,11 @@ export default function SurveyQuestion({
                 {!isFirst && (
                     <button type="button" className="nav-button back-button" onClick={onBack}>
                         Back
+                    </button>
+                )}
+                {isLast && (
+                    <button type="button" className="nav-button submit-button" onClick={handleSubmit}>
+                        Submit
                     </button>
                 )}
                 <button 
