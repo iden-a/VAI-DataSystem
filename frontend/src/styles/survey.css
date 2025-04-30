@@ -81,6 +81,19 @@
     margin-top: 3%;
 }
 
+.submit-button {
+    background-color: #27AE60;  
+    color: black;              
+    padding: 10px 20px; /* Top/bottom and left/right padding */
+    border: none;              
+    border-radius: 10px;        
+    font-size: 16px;           
+    cursor: pointer;            
+    transition: background-color 0.3s;  
+    margin-top: 3%;
+    float: right;
+}
+
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
@@ -148,3 +161,4 @@
     width: 20%;
     text-align: center;
 }
+
