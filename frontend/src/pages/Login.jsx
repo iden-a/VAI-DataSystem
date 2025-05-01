@@ -3,8 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import Logo from '../components/Logo';
 import '../styles/auth.css';
 import API from '../utils/apiClient';
+import { useAuth } from '../utils/AuthContext'; 
 
-export default function Login( { setUser, setIsAuthenticated, setSurveyData}) {
+
+export default function Login( ) {
+    const { setIsAuthenticated, setUser, setSurveyData } = useAuth();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
@@ -19,7 +22,9 @@ export default function Login( { setUser, setIsAuthenticated, setSurveyData}) {
             const res = await API.post('/login', {email, password})
 
             const { jwt_token, user } = res.data;
-            localStorage.setItem('jwtToken', jwt_token);
+
+            localStorage.setItem("jwtToken", jwt_token);
+            localStorage.setItem("user", JSON.stringify(user)); // store user info for persistence
 
             setUser(user);
             setIsAuthenticated(true);
@@ -28,6 +33,7 @@ export default function Login( { setUser, setIsAuthenticated, setSurveyData}) {
             const surveyRes = await API.get('/get-survey-responses')
             setSurveyData(surveyRes.data)
             console.log("Survey Data: ", surveyRes.data)
+            localStorage.setItem("surveyData", JSON.stringify(surveyRes.data));
 
             navigate('/dashboard'); 
             
