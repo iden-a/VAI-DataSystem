@@ -5,11 +5,13 @@ import surveyQuestions from "../data/surveyQuestions";
 import "../styles/dashboard.css";
 import "../styles/global.css";
 import Logo from "../components/Logo";
+import { useAuth } from '../utils/AuthContext'; // adjust the path if needed
+import Navbar from "../components/Navbar";
 
-// Register Chart.js plugin once
+// register Chart.js plugin once
 Chart.register(ChartDataLabels);
 
-// Helper to aggregate survey responses
+// helper function to aggregate survey responses
 const aggregateResponses = (data, questionId) => {
   const counts = {};
   data.forEach(entry => {
@@ -27,13 +29,23 @@ const aggregateResponses = (data, questionId) => {
   return counts;
 };
 
-export default function Dashboard({ user, isAuthenticated, surveyData }) {
+export default function Dashboard() {
+  const { isAuthenticated, surveyData } = useAuth();
+
+  const [loadingCharts, setLoadingCharts] = useState(true);
+  
   const chartRefs = useRef({});
   const charts = useRef({});
-  const [chartType, setChartType] = useState("pie");
+  const [chartType, setChartType] = useState("pie"); 
 
   useEffect(() => {
-    if (!Array.isArray(surveyData) || surveyData.length === 0) return;
+    setLoadingCharts(true);
+
+    // in the case where there is no survey data
+    if (!Array.isArray(surveyData) || surveyData.length === 0) {
+      setLoadingCharts(false);
+    return;
+  }
 
     surveyQuestions.forEach(({ questionId }) => {
       const canvas = chartRefs.current[questionId];
@@ -85,6 +97,7 @@ export default function Dashboard({ user, isAuthenticated, surveyData }) {
         }
       });
     });
+    setLoadingCharts(false);
   }, [surveyData, chartType]);
 
   if (!isAuthenticated) {
@@ -100,7 +113,7 @@ export default function Dashboard({ user, isAuthenticated, surveyData }) {
 
   return (
     <>
-      <Logo />
+    <Navbar/>
       <div className="dashboard-controls">
         <label htmlFor="chartType">Chart Type:</label>
         <select
@@ -114,18 +127,24 @@ export default function Dashboard({ user, isAuthenticated, surveyData }) {
         </select>
       </div>
 
-      <div className="charts-container">
-        {surveyQuestions.map(({ questionId, question }) => (
-          <div key={questionId} className="chart-block">
-            <h3>{question}</h3>
-            <canvas
-              ref={(el) => (chartRefs.current[questionId] = el)}
-              width={400}
-              height={400}
-            />
-          </div>
-        ))}
-      </div>
+      {loadingCharts ? (
+        <div className="loading-screen">
+          <div className="spinner"></div>
+        </div>
+      ) : (
+        <div className="charts-container">
+          {surveyQuestions.map(({ questionId, question }) => (
+            <div key={questionId} className="chart-block">
+              <h3>{question}</h3>
+              <canvas
+                ref={(el) => (chartRefs.current[questionId] = el)}
+                width={400}
+                height={400}
+              />
+            </div>
+          ))}
+        </div>
+      )}
 
       <button className="blue-button">Download</button>
     </>
