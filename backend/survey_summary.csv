@@ -1,0 +1,83 @@
+Total Responses,5
+
+Question:,Before this installation, how often did you visit this site?
+Answer,Count,Percentage
+Daily,3,60.0
+A few times a week,1,20.0
+A few times a month,1,20.0
+
+Question:,Since the installation, how often do you visit this site?
+Answer,Count,Percentage
+A few times a week,2,40.0
+A few times a month,1,20.0
+Once a week,1,20.0
+Daily,1,20.0
+
+Question:,On average, how much time do you spend at this site per visit?
+Answer,Count,Percentage
+15-30 minutes,3,60.0
+Less than 5 minutes,2,40.0
+
+Question:,What is your age group?
+Answer,Count,Percentage
+18-24,2,40.0
+65+,1,20.0
+25-34,1,20.0
+45-54,1,20.0
+
+Question:,What is your gender?
+Answer,Count,Percentage
+Female,2,40.0
+Male,2,40.0
+Prefer not to say,1,20.0
+
+Question:,What is your race/ethnicity?
+Answer,Count,Percentage
+Other,1,20.0
+Multiracial,1,20.0
+Native American or Alaska Native,1,20.0
+Asian,1,20.0
+Black or African American,1,20.0
+
+Question:,What is your zip code?
+Answer,Count,Percentage
+10032,4,80.0
+10033,1,20.0
+
+Question:,How welcome do you feel on this site?
+Average,3.0
+Minimum,2
+Maximum,4
+Confidence Interval (95%),(np.float64(2.12), np.float64(3.88))
+
+Question:,How safe do you feel on this site?
+Average,2.8
+Minimum,1
+Maximum,4
+Confidence Interval (95%),(np.float64(1.66), np.float64(3.94))
+
+Question:,How comfortable do you feel on this site?
+Average,4.2
+Minimum,3
+Maximum,5
+Confidence Interval (95%),(np.float64(3.47), np.float64(4.93))
+
+Question:,How positive is your overall experience at this site?
+Average,2.8
+Minimum,1
+Maximum,4
+Confidence Interval (95%),(np.float64(1.36), np.float64(4.24))
+
+Question:,What activity best describes your time spent at this site?
+Answer,Count,Percentage
+Took a phone call,2,40.0
+Passed through without stopping,1,20.0
+Socialized with others,1,20.0
+Other,1,20.0
+
+Question:,Has this installation made you more interested in exploring the surrounding neighborhood?
+Answer,Count,Percentage
+No,2,40.0
+Yes,2,40.0
+Not Sure,1,20.0
+
