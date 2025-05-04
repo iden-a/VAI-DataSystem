@@ -44,20 +44,34 @@ class SurveyAnalyzer:
     def get_response_count(self):
         """returns the number of total survey responses"""
         return len(self.df)
-
+    
     def summarize_multiple_choice(self, question_id):
         """returns summary for multiple choice questions"""
         if question_id not in self.df.columns:
             return None
 
-        counts = self.df[question_id].value_counts(dropna=True)
+        # flatten all responses into a single list
+        all_answers = self.df[question_id].dropna().tolist()
+        flattened = []
+        for ans in all_answers:
+            if isinstance(ans, list):
+                flattened.extend(ans)
+            else:
+                flattened.append(ans)
+
+        if not flattened:
+            return None
+
+        counts = pd.Series(flattened).value_counts()
         percentages = (counts / len(self.df)) * 100
+
         summary = pd.DataFrame({
             'Answer': counts.index,
             'Count': counts.values,
             'Percentage': percentages.values.round(2)
         })
         return summary
+
 
     def summarize_numeric_question(self, question_id):
         """summarizing numeric questions"""

@@ -7,7 +7,7 @@ import "../styles/global.css";
 import Logo from "../components/Logo";
 import { useAuth } from '../utils/AuthContext'; // adjust the path if needed
 import Navbar from "../components/Navbar";
-import axios from 'axios';
+import API from '../utils/apiClient';
 
 // register Chart.js plugin once
 Chart.register(ChartDataLabels);
@@ -32,7 +32,7 @@ const aggregateResponses = (data, questionId) => {
 
 const handleDownload = async () => {
   try {
-    const response = await axios.get('http://127.0.0.1:5000/generate-report', {
+    const response = await API.get('/generate-report', {
       responseType: 'blob',
     });
 
