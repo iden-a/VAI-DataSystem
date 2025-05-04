@@ -7,6 +7,7 @@ import "../styles/global.css";
 import Logo from "../components/Logo";
 import { useAuth } from '../utils/AuthContext'; // adjust the path if needed
 import Navbar from "../components/Navbar";
+import API from '../utils/apiClient';
 
 // register Chart.js plugin once
 Chart.register(ChartDataLabels);
@@ -27,6 +28,25 @@ const aggregateResponses = (data, questionId) => {
     }
   });
   return counts;
+};
+
+const handleDownload = async () => {
+  try {
+    const response = await API.get('/generate-report', {
+      responseType: 'blob',
+    });
+
+    // creates a URL for the blob and triggers download
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'survey_reports.zip'); // file name
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+  } catch (err) {
+    console.error('Error downloading the report:', err);
+  }
 };
 
 export default function Dashboard() {
@@ -146,7 +166,7 @@ export default function Dashboard() {
         </div>
       )}
 
-      <button className="blue-button">Download</button>
+      <button className="blue-button" onClick={handleDownload}>Download</button>
     </>
   );
 }

@@ -1,9 +1,33 @@
 # Define all your Flask routes (API endpoints)
-from flask import Blueprint, request, jsonify, current_app
-from app.models import UserSignUp, SurveyResponse
+from flask import Blueprint, request, jsonify, send_file, current_app
+
 from firebase_admin import auth, firestore
+import io
+import zipfile
+import os
+import pandas as pd
+from app.models import UserSignUp, SurveyResponse
+
+
+from app.utils import SurveyAnalyzer, load_responses_from_firestore, save_graphs_to_pdf, clean_firestore_responses
 
 main = Blueprint('main', __name__)
+
+question_map = {
+    "q1": "Before this installation, how often did you visit this site?",
+    "q2": "Since the installation, how often do you visit this site?",
+    "q3": "On average, how much time do you spend at this site per visit?",
+    "q4": "What is your age group?",
+    "q5": "What is your gender?",
+    "q6": "What is your race/ethnicity?",
+    "q7": "What is your zip code?",
+    "q8": "How welcome do you feel on this site?",
+    "q9": "How safe do you feel on this site?",
+    "q10": "How comfortable do you feel on this site?",
+    "q11": "How positive is your overall experience at this site?",
+    "q12": "What activity best describes your time spent at this site?",
+    "q13": "Has this installation made you more interested in exploring the surrounding neighborhood?",
+}
 
 @main.route('/')
 def health_check():
@@ -37,9 +61,11 @@ def submit_survey():
     
     try:
         current_app.db.collection('surveyResponses').add(survey_response.to_dict())
+        print("Survey response saved successfully to Firestore!")  # Added success print
         return jsonify({"message": "Survey submitted", "survey responses": responses}), 200
 
     except Exception as e:
+        print("Error saving survey response:", str(e))
         return jsonify({"error": str(e)}), 400
 
 
@@ -132,4 +158,40 @@ def get_survey_responses():
 
         return jsonify(responses), 200
     except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+@main.route('/generate-report', methods=['GET'])
+def generate_report():
+    try:
+        raw_responses = load_responses_from_firestore()
+        responses = clean_firestore_responses(raw_responses, question_map)
+        analyzer = SurveyAnalyzer(responses, question_map)
+
+        if not responses:
+            return jsonify({"error": "No survey responses found to generate report."}), 400
+
+        analyzer = SurveyAnalyzer(responses, question_map)
+
+        print(f"Sample Firestore response: {responses[:2]}")
+        csv_path = 'survey_summary.csv'
+        #excel_path = 'survey_summary.xlsx'
+        pdf_path = 'survey_graphs_summary.pdf'
+
+        analyzer.export_summary_csv(csv_path)
+        #analyzer.export_summary_excel(excel_path)
+        analyzer.generate_graphs('survey_graphs')
+        save_graphs_to_pdf('survey_graphs', pdf_path, question_map)
+
+        memory_file = io.BytesIO()
+        with zipfile.ZipFile(memory_file, 'w') as zf:
+            zf.write(csv_path)
+            #zf.write(excel_path)
+            zf.write(pdf_path)
+
+        memory_file.seek(0)
+        
+        return send_file(memory_file, mimetype='application/zip', as_attachment=True, download_name='survey_reports.zip')
+    
+    except Exception as e:
+        print("Error in generate_report:", str(e))
         return jsonify({"error": str(e)}), 500
