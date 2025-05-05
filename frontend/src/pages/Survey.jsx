@@ -62,8 +62,10 @@ export default function SurveyPage() {
     <>
       <Logo />
       <div className="survey-page">
-        <h2>Installation Title</h2>
-        <img src="/placeholder-img.jpg" alt="Installation 1" className="survey-img" />
+        {/* this is a placeholder */}
+        <h2>Common Ground</h2>
+        <img src="/Common_Ground.jpeg" alt="Installation 1" className="survey-img" />
+        <br></br>
 
         <div className="progress-container">
           <div className="progress-text">
