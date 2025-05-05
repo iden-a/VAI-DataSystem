@@ -4,6 +4,12 @@ import Logo from '../components/Logo';
 import '../styles/auth.css';
 import API from '../utils/apiClient';
 import { useAuth } from '../utils/AuthContext'; 
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import firebaseConfig from "../utils/firebaseConfig"; 
+import { initializeApp } from "firebase/app";
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
 
 export default function Login( ) {
@@ -17,36 +23,41 @@ export default function Login( ) {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-
+    
         try {
-            const res = await API.post('/login', {email, password})
+          const userCred = await signInWithEmailAndPassword(auth, email, password);
+          const idToken = await userCred.user.getIdToken();
 
-            const { jwt_token, user } = res.data;
-
-            localStorage.setItem("jwtToken", jwt_token);
-            localStorage.setItem("user", JSON.stringify(user)); // store user info for persistence
-
-            setUser(user);
-            setIsAuthenticated(true);
-
-            // fetch survey data after logging in 
-            const surveyRes = await API.get('/get-survey-responses')
-            setSurveyData(surveyRes.data)
-            console.log("Survey Data: ", surveyRes.data)
-            localStorage.setItem("surveyData", JSON.stringify(surveyRes.data));
-
-            navigate('/dashboard'); 
-            
+          // additional security step to verify that the correct user is being logged in
+          const res = await API.post("/verify-token", { idToken });
+            console.log("Verified backend UID:", res.data.uid);
+    
+          // save token and user to localStorage
+          localStorage.setItem("jwtToken", idToken);
+          localStorage.setItem("user", JSON.stringify({
+            email: userCred.user.email,
+            uid: userCred.user.uid,
+          }));
+    
+          setUser({ email: userCred.user.email, uid: userCred.user.uid });
+          setIsAuthenticated(true);
+    
+          // fetch survey data after login
+          const surveyRes = await API.get('/get-survey-responses');
+          setSurveyData(surveyRes.data);
+          localStorage.setItem("surveyData", JSON.stringify(surveyRes.data));
+    
+          navigate("/dashboard");
         } catch (err) {
-            setError(err.response?.data?.message || 'Login failed. Please enter a valid email/password.');
-            console.error('Login error:', err);
+          console.error("Token verification failed", err);
+          console.error("Login error:", err);
+          setError("Invalid email or password.");
         }
-        
+
         setEmail('')
         setPassword('')
-    };
-
-
+      };
+        
     return (
         <>
         <Logo/>
