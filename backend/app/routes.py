@@ -99,48 +99,16 @@ def register_user():
     except Exception as e:
         return jsonify({"error": str(e)}), 400
     
-# user logging in
-@main.route('/login', methods=['POST'])
-def login_user():
-    user_data = request.json
-    email = user_data.get('email')
-    password = user_data.get('password')
-
-    # Basic validation, will go in depth in the frontend!
-    if not all([email, password]):
-        return jsonify({"error": "Missing required fields"}), 400
-    
-
+# verifying that the user attempting to login exists within our DB
+@main.route('/verify-token', methods=['POST'])
+def verify_token():
+    id_token = request.json.get("idToken")
     try:
-        # Retrieving the user by email
-        user = auth.get_user_by_email(email)
-
-        # Authentication credential for users
-        jwt_token = auth.create_custom_token(user.uid)
-
-        # Fetch extra user info from Firestore
-        db = firestore.client()
-        user_doc = db.collection('users').document(user.uid).get()
-
-        if user_doc.exists:
-            user_info = user_doc.to_dict()
-            first_name = user_info.get('firstName', '')
-            last_name = user_info.get('lastName', '')
-        else:
-            first_name = ''
-            last_name = ''
-
-        return jsonify({"message": "User logged in successfully", 
-                        "jwt_token": jwt_token.decode(),
-                        "user" : {
-                            "email" : user.email,
-                            "first_name" : first_name,
-                            "last_name" : last_name
-                        }
-                        }), 200
-
+        decoded_token = auth.verify_id_token(id_token)
+        uid = decoded_token['uid']
+        return jsonify({"message": "Token verified", "uid": uid}), 200
     except Exception as e:
-        return jsonify({"error": str(e)}), 400
+        return jsonify({"error": str(e)}), 401
 
 @main.route('/get-survey-responses', methods=['GET'])
 def get_survey_responses():
@@ -174,18 +142,15 @@ def generate_report():
 
         print(f"Sample Firestore response: {responses[:2]}")
         csv_path = 'survey_summary.csv'
-        #excel_path = 'survey_summary.xlsx'
         pdf_path = 'survey_graphs_summary.pdf'
 
         analyzer.export_summary_csv(csv_path)
-        #analyzer.export_summary_excel(excel_path)
         analyzer.generate_graphs('survey_graphs')
         save_graphs_to_pdf('survey_graphs', pdf_path, question_map)
 
         memory_file = io.BytesIO()
         with zipfile.ZipFile(memory_file, 'w') as zf:
             zf.write(csv_path)
-            #zf.write(excel_path)
             zf.write(pdf_path)
 
         memory_file.seek(0)
