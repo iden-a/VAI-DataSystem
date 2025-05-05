@@ -2,3 +2,7 @@ venv/
 .env
 app/firebase_key.json
 app/__pycache__
+survey_graphs/
+survey_graphs_summary.pdf
+survey_summary.csv
+survey_summary.xlsx
